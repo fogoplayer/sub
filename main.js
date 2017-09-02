@@ -7,7 +7,6 @@ var load = function(){
   //By default the storage object has 4 contents, I'm not sure why. If the
   //storage object isn't empty, loop through storage and populate input fields
   if(storage.length !== 4 ){
-    console.log("a");
     for(i = 0;i<ref.length;i++){
       var id = ref.substring(i,i+1);
       var element = document.getElementById(id);
@@ -43,10 +42,13 @@ var translate = function(){
   //Bring in output as a variable
   var output = document.getElementById("output");
   output.value = "";
+  //loop through input and translate char by char
   for(i=0;i<input.length;i++){
     var id = input.substring(i, i+1);
+    //Spaces are stored under _
     if (id === " "){
       output.value += localStorage.getItem("_");
+    //If it's not in storage, just use the character itself
     }else if (localStorage.getItem(id) === null){
       output.value += id;
     }else{
@@ -55,12 +57,29 @@ var translate = function(){
   }
 };
 
+//Inport a string of text as a key
+var importFunc = function(){
+  var key = prompt("Enter Key");
+  for(i = 0;i<key.length;i++){
+    var id = ref.substring(i,i+1);
+    localStorage.setItem(id, key.substring(i,i+1));
+  }
+  load();
+};
+
+//Export key as a string of text
+var exportFunc = function(){
+  var key = "";
+  for(i = 0;i<ref.length;i++){
+    var id = ref.substring(i,i+1);
+    key += localStorage.getItem(id) ;
+    console.log(key);
+  }
+  prompt("Copy your key below:", key);
+};
+
 //Run the load function on page load
 load();
-document.getElementById("translateButton").addEventListener("click", translate);
 document.getElementById("input").addEventListener("keyup", function(event) {
-    event.preventDefault();
-    if (event.keyCode == 13) {
-        translate();
-    }
+    translate();
 });
